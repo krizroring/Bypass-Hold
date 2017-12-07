@@ -38,7 +38,8 @@ void main(void) {
    uint8_t change_state; // to change status of the pedal
     if( eeprom_read(0) == 0xFF ) { // Read from 0 address location
       change_state = 1;			// If previous state was on
-    }	else {
+    }
+    else {
       change_state = 0;			// If previous state was off
     }
 
