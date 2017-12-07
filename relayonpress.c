@@ -35,9 +35,6 @@ void main(void) {
    uint8_t press_switch; // variable to detect if the switch is pressed
    press_switch = 0;
 
-   // uint8_t debug_value;
-   // debug_value = 0x00;
-
    uint8_t change_state; // to change status of the pedal
     if( eeprom_read(0) == 0xFF )	// Read from 0 address location
         change_state = 1;			// If previous state was on
@@ -127,8 +124,6 @@ void main(void) {
           __delay_ms(10);
           change_state=0; // reset change_state
        }
-
-       // debug_value = eeprom_read(0);
 
        // To let the pedal in the good state (on or off)
        if (state == 1) { // effect on
