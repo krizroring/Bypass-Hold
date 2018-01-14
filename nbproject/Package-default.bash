@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/Relay_Bypass_on_press.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=Relay_Bypass_on_press.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=relaybypassonpress.x/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/relaybypass.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=relaybypass.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=relaybypass/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/relaybypassonpress.x/bin
+makeDirectory ${TMPDIR}/relaybypass/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/relaybypassonpress.x.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/relaybypass.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/relaybypassonpress.x.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/relaybypass.tar *
 checkReturnCode
 
 # Cleanup

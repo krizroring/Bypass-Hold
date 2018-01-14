@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Relay Bypass on press.X
+PROJECTNAME=relaybypass
 
 # Active Configuration
 DEFAULTCONF=default
