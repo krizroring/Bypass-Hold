@@ -69,8 +69,8 @@ void main(void) {
         // If the switch is pressed
         if (GP1 == 0) {
             if (button_state != GP1) {
-                button_state = GP1;
                 __delay_ms(15); // debouncing
+                button_state = GP1;
                 if (GP1 == 0) {
                     change_state = 1;
 
@@ -90,8 +90,8 @@ void main(void) {
 
 
         if (GP1 == 1 && button_state != GP1) {
-            button_state = GP1;
             __delay_ms(15); // debouncing
+            button_state = GP1;
             if (GP1 == 1 && hold_mode == 1) {
                 change_state = 1;
                 hold_mode = 0;
