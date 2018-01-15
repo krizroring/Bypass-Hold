@@ -15,7 +15,7 @@ volatile uint32_t tick_count;
 
 void InitTimer0(void) {
     // Timer0 is a 8bit timer, select T0CS and PSA to be one
-    OPTION_REG &= 0xC1; //Make Prescaler 1:4 (1 MIPS: 256 (8bit) *4 = 1024 ms)
+    OPTION_REG &= 0xC3; //Make Prescaler 1:16 (1 MIPS: 256 (8bit) *16) +/- 0.004 sec
 
     T0IE = 1; // Enable Timer0 interrupt
     GIE = 1; // Enable global interrupts
@@ -81,8 +81,8 @@ void main(void) {
             } else {
                 // This is where experimentation comes into play
                 // 1000 is a number chosen on excellent guestimation practices, developed for many years by yours truly :)
-                // The number (hopefully) relates to the number of milliseconds of the interrupt timer, the time elapsed after the switch war pressed
-                if (state == 1 && hold_mode == 0 && tick_count > 1000) {
+                // The number (hopefully) relates to the number of milliseconds/4  of the interrupt timer, the time elapsed after the switch war pressed
+                if (state == 1 && hold_mode == 0 && tick_count > 250) {
                     hold_mode = 1;
                 }
             }
