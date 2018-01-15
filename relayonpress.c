@@ -76,7 +76,7 @@ void main(void) {
                     change_state = 1;
 
                     if (state == 0) {
-                        T0IF = 1; // Enable the interrupt
+                        T0IE = 1; // Enable the interrupt
                         
                         tick_count = 0; // Reset the tick counter to start counter for hold effect when the pedal will become 'on' in the next state change
                     }
@@ -94,7 +94,7 @@ void main(void) {
         if (GP1 == 1 && button_state != GP1) {
             __delay_ms(20); // debounce
             
-            T0IF = 0; // Disable the interrupt
+            T0IE = 0; // Disable the interrupt
                 
             button_state = GP1;
             
