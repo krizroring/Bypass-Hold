@@ -108,10 +108,10 @@ void main(void) {
                 GP4 = 0;
                 __delay_ms(20);
                 GP2 = 0; // photoFET off
-                state = 1;
-
+               
                 // Write the state to EEPROM.
                 eeprom_write(0, 0xFF); // Write 0xFF at 0 address location
+                state = 1;
             } else { // change to off
                 GP2 = 1;
                 __delay_ms(20);
@@ -120,24 +120,25 @@ void main(void) {
                 GP4 = 0;
                 __delay_ms(20);
                 GP2 = 0;
-                state = 0;
-
+               
                 // Write the state to EEPROM.
                 eeprom_write(0, 0x00); // Write 0x00 at 0 address location
+                
+                state = 0;
             }
             __delay_ms(10);
             change_state = 0; // reset change_state
         }
 
         // To let the pedal in the good state (on or off)
-        if (state == 1) { // effect on
-            GP0 = 1; // LED on
-            GP5 = 1; // relay on
-            GP4 = 0;
-        } else { // effect off
-            GP0 = 0; // LED off
-            GP5 = 0; // relay off
-            GP4 = 0;
-        }
+//        if (state == 1) { // effect on
+//            GP0 = 1; // LED on
+//            GP5 = 1; // relay on
+//            GP4 = 0;
+//        } else { // effect off
+//            GP0 = 0; // LED off
+//            GP5 = 0; // relay off
+//            GP4 = 0;
+//        }
     }
 }
