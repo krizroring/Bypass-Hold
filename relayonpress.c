@@ -15,9 +15,9 @@ volatile uint32_t tick_count;
 
 void InitTimer0(void) {
     // Timer0 is a 8bit timer, select T0CS and PSA to be one
-    OPTION_REG &= 0xC3; //Make Prescaler 1:16 (1 MIPS: 256 (8bit) *16) +/- 0.004 sec
+    OPTION_REG &= 0xC1; //Make Prescaler 14 (1 MIPS: 256 (8bit) *4) +/- 0.001 sec
 
-    T0IE = 1; // Enable Timer0 interrupt
+//    T0IE = 1; // Enable Timer0 interrupt
     GIE = 1; // Enable global interrupts
 }
 
@@ -69,12 +69,15 @@ void main(void) {
         // If the switch is pressed
         if (GP1 == 0) {
             if (button_state != GP1) {
-                __delay_ms(15); // debouncing
+                __delay_ms(20); // debounce
+                
                 button_state = GP1;
                 if (GP1 == 0) {
                     change_state = 1;
 
                     if (state == 0) {
+                        T0IF = 1; // Enable the interrupt
+                        
                         tick_count = 0; // Reset the tick counter to start counter for hold effect when the pedal will become 'on' in the next state change
                     }
                 }
@@ -82,16 +85,19 @@ void main(void) {
                 // This is where experimentation comes into play
                 // 1000 is a number chosen on excellent guestimation practices, developed for many years by yours truly :)
                 // The number (hopefully) relates to the number of milliseconds/4  of the interrupt timer, the time elapsed after the switch war pressed
-                if (state == 1 && hold_mode == 0 && tick_count > 250) {
+                if (state == 1 && hold_mode == 0 && tick_count > 1000) {
                     hold_mode = 1;
                 }
             }
         }
 
-
         if (GP1 == 1 && button_state != GP1) {
-            __delay_ms(15); // debouncing
+            __delay_ms(20); // debounce
+            
+            T0IF = 0; // Disable the interrupt
+                
             button_state = GP1;
+            
             if (GP1 == 1 && hold_mode == 1) {
                 change_state = 1;
                 hold_mode = 0;
