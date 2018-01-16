@@ -86,10 +86,10 @@ void main(void) {
             }
         }
 
-
         if (GP1 == 1 && button_state != GP1) {
             __delay_ms(5); // debouncing
             button_state = GP1;
+            
             if (GP1 == 1 && hold_mode == 1) {
                 change_state = 1;
                 hold_mode = 0;
