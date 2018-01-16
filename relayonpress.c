@@ -15,7 +15,7 @@ volatile uint32_t tick_count;
 
 void InitTimer0(void) {
     // Timer0 is a 8bit timer, select T0CS and PSA to be one
-    OPTION_REG &= 0xC3; //Make Prescaler 1:16 (1 MIPS: 256 (8bit) *16) +/- 0.004 sec
+    OPTION_REG &= 0x83; //Make Prescaler 1:16 (1 MIPS: 256 (8bit) *16) +/- 0.004 sec
 
     T0IE = 1; // Enable Timer0 interrupt
     GIE = 1; // Enable global interrupts
@@ -50,11 +50,9 @@ void main(void) {
     tick_count = 0; // tick count for the interrupt timer
 
     uint8_t state = 0; // on-off state of the pedal (1 = on, 0 = off)
-
-    uint8_t button_state = 0; // debounce state for the button
-    
+    uint8_t button_state = 1; // debounce state for the button
     uint8_t hold_mode = 0; // State for the hold mode indicator
-
+    
     uint8_t change_state; // to change status of the pedal
     if (eeprom_read(0) == 0xFF) { // Read from 0 address location, 0x00 = off, oxFF = on
         change_state = 1; // If previous state was on
@@ -69,7 +67,7 @@ void main(void) {
         // If the switch is pressed
         if (GP1 == 0) {
             if (button_state != GP1) {
-                __delay_ms(15); // debouncing
+                __delay_ms(5); // debouncing
                 button_state = GP1;
                 if (GP1 == 0) {
                     change_state = 1;
@@ -90,7 +88,7 @@ void main(void) {
 
 
         if (GP1 == 1 && button_state != GP1) {
-            __delay_ms(15); // debouncing
+            __delay_ms(5); // debouncing
             button_state = GP1;
             if (GP1 == 1 && hold_mode == 1) {
                 change_state = 1;
@@ -123,22 +121,9 @@ void main(void) {
                
                 // Write the state to EEPROM.
                 eeprom_write(0, 0x00); // Write 0x00 at 0 address location
-                
                 state = 0;
             }
-            __delay_ms(10);
             change_state = 0; // reset change_state
         }
-
-        // To let the pedal in the good state (on or off)
-//        if (state == 1) { // effect on
-//            GP0 = 1; // LED on
-//            GP5 = 1; // relay on
-//            GP4 = 0;
-//        } else { // effect off
-//            GP0 = 0; // LED off
-//            GP5 = 0; // relay off
-//            GP4 = 0;
-//        }
     }
 }
