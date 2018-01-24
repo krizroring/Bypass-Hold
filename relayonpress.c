@@ -22,7 +22,6 @@ void InitTimer0(void) {
 }
 
 // Interrupt function
-
 void interrupt ISR(void) {
     if (T0IF) // If Timer0 interrupt
     {
@@ -32,7 +31,6 @@ void interrupt ISR(void) {
 }
 
 // Initialization
-
 void main(void) {
     ANSEL = 0; // no analog GPIOs
     CMCON = 0x07; // comparator off
@@ -66,39 +64,44 @@ void main(void) {
     while (1) {
         // If the switch is pressed
         if (GP1 == 0) {
-            if (button_state != GP1) {
-                __delay_ms(5); // debouncing
-                button_state = GP1;
-                if (GP1 == 0) {
+            // debouncing
+            __delay_ms(10);
+            if (GP1 == 0) {
+                if (GP1 != button_state) {
+                    button_state = GP1;
                     change_state = 1;
 
                     if (state == 0) {
                         tick_count = 0; // Reset the tick counter to start counter for hold effect when the pedal will become 'on' in the next state change
                     }
+                } else {
+                    // This is where experimentation comes into play
+                    // 1000 is a number chosen on excellent guestimation practices, developed for many years by yours truly :)
+                    // The number (hopefully) relates to the number of milliseconds/4  of the interrupt timer, the time elapsed after the switch war pressed
+                    if (state == 1 && hold_mode == 0 && tick_count > 250) {
+                        hold_mode = 1;
+                    }
                 }
-            } else {
-                // This is where experimentation comes into play
-                // 1000 is a number chosen on excellent guestimation practices, developed for many years by yours truly :)
-                // The number (hopefully) relates to the number of milliseconds/4  of the interrupt timer, the time elapsed after the switch war pressed
-                if (state == 1 && hold_mode == 0 && tick_count > 250) {
-                    hold_mode = 1;
+            }  
+        }
+        
+        if(GP1 == 1) {
+            __delay_ms(10); // debouncing
+            if(GP1 == 1 && GP1 != button_state) {
+                button_state = GP1;
+
+                if (GP1 == 1 && hold_mode == 1) {
+                    change_state = 1;
+                    hold_mode = 0;
                 }
             }
         }
-
-        if (GP1 == 1 && button_state != GP1) {
-            __delay_ms(5); // debouncing
-            button_state = GP1;
-            
-            if (GP1 == 1 && hold_mode == 1) {
-                change_state = 1;
-                hold_mode = 0;
-            }
-        }
-
+        
         // Changing state of the pedal
         if (change_state == 1) {
-            if (state == 0) { // change to on
+            if (state == 0) { 
+                // change to on
+                
                 GP2 = 1; // photoFET on
                 __delay_ms(20);
                 GP0 = 1; // LED on
@@ -110,14 +113,16 @@ void main(void) {
                 // Write the state to EEPROM.
                 eeprom_write(0, 0xFF); // Write 0xFF at 0 address location
                 state = 1;
-            } else { // change to off
-                GP2 = 1;
+            } else { 
+                // change to off
+                
+                GP2 = 1; // photoFET on
                 __delay_ms(20);
                 GP0 = 0; // LED off
                 GP5 = 0; // relay off
                 GP4 = 0;
                 __delay_ms(20);
-                GP2 = 0;
+                GP2 = 0; // photoFET off
                
                 // Write the state to EEPROM.
                 eeprom_write(0, 0x00); // Write 0x00 at 0 address location
