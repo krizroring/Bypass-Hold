@@ -4,7 +4,7 @@
  *
  * Created on 24/01/2018
  * 
- * Based on code by: Benoit
+ * Based on code by: Coda Effects (Benoit M)
  */
 
 #include <stdio.h>
