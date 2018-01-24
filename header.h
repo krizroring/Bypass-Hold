@@ -1,8 +1,10 @@
-/* 
+/*
  * File:   header.h
- * Author: Coda Effects (Benoit M)
+ * Author: Christian Roring
  *
- * Created on 7 février 2016, 14:41
+ * Created on 24/01/2018
+ * 
+ * Based on code by: Coda Effects (Benoit M)
  */
 
 // CONFIG
@@ -14,5 +16,5 @@
 #pragma config CP = OFF         // Code Protection bit (Program Memory code protection is disabled)
 #pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
 
-// Définir la fréquence de l'oscillateur
+// Define the clockspeed of the 12F675 at 4Mhz (max)
 #define _XTAL_FREQ 4000000
